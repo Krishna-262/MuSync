@@ -35,12 +35,15 @@ export async function POST(req) {
         }
         const res = await youtubeSearchApi.GetVideoDetails(extractedId);
         console.log(res.title);
-        if (!res || !res.title) {
-            console.error("🔴 YouTube API response is invalid:", res);
+        if (!res || !res.title || !res.thumbnail || !res.thumbnail.thumbnails) {
             return NextResponse.json({
-              message: "Could not fetch video details",
-            }, { status: 500 });
+                message: 'Error fetching YouTube details',
+                error: 'Missing title or thumbnails in API response',
+            }, {
+                status: 500,
+            });
         }
+
         console.log(res.title);
         console.log(JSON.stringify(res.thumbnail.thumbnails));
         const thumb = res.thumbnail.thumbnails;
