@@ -35,6 +35,13 @@ export async function POST(req) {
         }
         const res = await youtubeSearchApi.GetVideoDetails(extractedId);
         console.log(res.title);
+        if (!res || !res.title) {
+            console.error("🔴 YouTube API response is invalid:", res);
+            return NextResponse.json({
+              message: "Could not fetch video details",
+            }, { status: 500 });
+        }
+        console.log(res.title);
         console.log(JSON.stringify(res.thumbnail.thumbnails));
         const thumb = res.thumbnail.thumbnails;
         thumb.sort((a, b) => a.width - b.width);
